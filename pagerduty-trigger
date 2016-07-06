@@ -10,21 +10,23 @@
 # PAGERDUTY_SERVICE_KEY="1234567890abcdef1234567890abcdef"
 
 CONFIG_FILE=/etc/pagerduty/pagerduty.conf
-EVENT=${MONIT_DESCRIPTION-$1}
 
 if [ -s $CONFIG_FILE ]; then
   . /etc/pagerduty/pagerduty.conf
 fi
 
-if [ -z "$EVENT" ]; then
-  echo "Usage: $0 <event>"
-  exit 1
-elif [ -z "$PAGERDUTY_SERVICE_KEY" ]; then
+if [ -z "$PAGERDUTY_SERVICE_KEY" ]; then
   echo "Failed to trigger event: you must set the PAGERDUTY_SERVICE_KEY variable."
   exit 1
 elif [ ! -x "/usr/local/bin/pagerduty" ]; then
   echo "Failed to trigger event: /usr/local/bin/pagerduty does not exist or is not executable."
   exit 1
+fi
+
+if [ -z "$1" ]; then
+  EVENT="${MONIT_SERVICE} ${MONIT_DESCRIPTION}"
+else
+  EVENT="$1"
 fi
 
 HOST=`hostname -s`
