@@ -10,12 +10,13 @@
 # PAGERDUTY_SERVICE_KEY="1234567890abcdef1234567890abcdef"
 
 CONFIG_FILE=/etc/pagerduty/pagerduty.conf
+EVENT=${MONIT_DESCRIPTION-$1}
 
 if [ -s $CONFIG_FILE ]; then
   . /etc/pagerduty/pagerduty.conf
 fi
 
-if [ -z "$1" ]; then
+if [ -z "$EVENT" ]; then
   echo "Usage: $0 <event>"
   exit 1
 elif [ -z "$PAGERDUTY_SERVICE_KEY" ]; then
@@ -26,7 +27,6 @@ elif [ ! -x "/usr/local/bin/pagerduty" ]; then
   exit 1
 fi
 
-EVENT="$1"
 HOST=`hostname -s`
 INCIDENT_KEY=`echo "$HOST:$EVENT" | md5sum | cut -f 1 -d ' '`
 TMP_FILE="/tmp/pagerduty-$INCIDENT_KEY"
