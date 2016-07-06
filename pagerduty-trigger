@@ -43,7 +43,7 @@ if [ -f "$TMP_FILE" ]; then
   fi
 fi
 
-DESCRIPTION="$EVENT failed on $HOST"
+DESCRIPTION="$EVENT on $HOST"
 DATE=`date`
 
 echo "$DATE: $DESCRIPTION" >> $TMP_FILE
